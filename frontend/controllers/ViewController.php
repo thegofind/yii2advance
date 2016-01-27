@@ -43,4 +43,6 @@ class ViewController extends Controller{
 
 		return $this->render('index3');  //将index3放入$content中
 	}
+
+	
 }
