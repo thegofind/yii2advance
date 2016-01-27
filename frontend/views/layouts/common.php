@@ -7,5 +7,6 @@
 <body>
 	<h1>this is common.php</h1>
 	<?=$content;?>
+	<?=$this->blocks['blockOfIndex3'];?>
 </body>
 </html>
