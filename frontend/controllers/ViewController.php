@@ -22,7 +22,7 @@ class ViewController extends Controller{
 		$data = array();
 		$data['view_name'] = $user_name;
 		$data['view_phone'] = $user_phone;
-		return $this->renderPartial('index1',$data);	//传递的参数必须为数组
+		return $this->renderPartial('index1',$data);	//传递的参数必须为关系型数组
 
 	}
 
