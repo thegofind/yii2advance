@@ -132,8 +132,3 @@ class DbController extends Controller{
 	}
 
 }
-
-git config --global user.name "thegofind"
-git config --global user.email "43659894@qq.com"
-
-git clone https://github.com/thegofind/yii2advance.git
