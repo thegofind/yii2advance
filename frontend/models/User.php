@@ -9,8 +9,15 @@ class User extends ActiveRecord{
 
 		return [
 			['id','integer'],
-			['name','string','length'=>[0,7]]
+			['name','string','length'=>[0,20]]
 		];
+	}
+
+	public function getIndent(){
+
+		//一个user有多个indent，所以用hasMany()
+		return $this->hasMany(Indent::className(),['user_id'=>'id'])->asArray();
+		
 	}
 	
 }

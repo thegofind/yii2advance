@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use yii\web\Controller;
 use app\models\User;
+use app\models\Indent;
 
 class DbController extends Controller{
 
@@ -70,6 +71,69 @@ class DbController extends Controller{
 		$result->save();
 	}
 
+	//关联查询
+	public function actionQuery(){
 
+		//查询用户名为chenhaoran的所有订单
+		$user = User::find()->where(['name'=>'chenhaoran'])->one();
+		$result = $user->indent;   //等同于$result = $user->hasMany(Indent::className(),['user_id'=>'id'])->asArray()->all();
+		print_r($result);
+
+		//查询拥有价格为23的订单的任一用户
+		$indent = Indent::find()->where(['price'=>23])->one();
+		$result1 = $indent->user;
+		print_r($result1);
+
+
+		//查询拥有价格为23的订单的所有用户
+		$indents = Indent::find()->where(['price'=>123])->all();
+		foreach ($indents as $indent) {
+			$result2 = $indent->user;
+			print_r($result2);
+		}
+		
+	}
+
+	//关联查询性能
+	public function actionPerformance(){
+
+		//释放关联查询缓存
+		// $user = User::find()->where(['name'=>'chenhaoran']);
+		// $user_obj = $user->one();
+		// $user_arr = $user->asArray()->one();
+
+		// $indent = $user_obj->indent; 	//结果会被缓存
+		// print_r($indent);
+
+		// //修改chenhaoran用户的一个订单的价格为777
+		// $oneIndentOfUser = Indent::find()->where(['user_id'=>$user_arr['id']])->one();
+		// $oneIndentOfUser['price']=777;
+		// $oneIndentOfUser->save();
+		
+		// unset($user_obj->indent);  //释放掉缓存
+		// $indent1 = $user_obj->indent;
+		// print_r($indent1);
+
+		//关联查询性能优化，需求：查询id大于3的所有用户的订单
+
+		//未优化
+		$users = User::find()->where(['>','id','3'])->all();
+		foreach ($users as $user) {
+			$indents = $user->indent;
+			print_r($indents);
+		}
+
+		//已优化，等同于select * from indent where user_id in (...)
+		$usersWith = User::find()->where(['>','id','3'])->with('indent')->all();
+		foreach ($usersWith as $user) {
+			$indents = $user->indent;
+			print_r($indents);
+		}
+	}
 
 }
+
+git config --global user.name "thegofind"
+git config --global user.email "43659894@qq.com"
+
+git clone https://github.com/thegofind/yii2advance.git
